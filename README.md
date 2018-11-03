@@ -29,12 +29,6 @@ The objectif of this project to to make it as simple as possible to create on AW
 
 ## Phase 2
 
-    1-
-    2-
-    3-
-
-## Phse 3
-
     1- SSH to the Public IP@ or DNS name
     2- with username: jnpr , and key_pair ( mine is called terraformkeypair_ohio.perm, for the Ohio ;-)
 
