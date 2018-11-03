@@ -28,6 +28,8 @@ variable my_key_name {}
 variable my_vmx_ami {}
 variable my_ubuntu_ami {}
 variable my_ubuntu_instance_type {}
+#variable my_vMX1_instance_type {}
+#variable my_vMX2_instance_type {}
 
 # 0- AWS access and secret key to access AWS
 provider "aws" {
@@ -202,6 +204,7 @@ resource "aws_instance" "ubuntu2" {
 resource "aws_instance" "vMX1" {
         ami = "${var.my_vmx_ami}"
         instance_type = "m4.xlarge"
+        #instance_type = "${var.my_vMX1_instance_type}"
         key_name = "${var.my_key_name}"
         subnet_id = "${aws_subnet.mgmt.id}"
         security_groups= ["${aws_security_group.allow_ssh.id}"]
@@ -216,6 +219,7 @@ resource "aws_instance" "vMX1" {
 resource "aws_instance" "vMX2" {
         ami = "${var.my_vmx_ami}"
         instance_type = "m4.xlarge"
+        #instance_type = "${var.my_vMX2_instance_type}"
         key_name = "${var.my_key_name}"
         subnet_id = "${aws_subnet.mgmt.id}"
         security_groups= ["${aws_security_group.allow_ssh.id}"]
@@ -228,9 +232,10 @@ resource "aws_instance" "vMX2" {
 
 # 6-1a add Network interface to the vMX1 Instance
 resource "aws_network_interface" "vMX1_ge0-0-0" {
+  description = "vMX1_ge0-0-0"
   subnet_id       = "${aws_subnet.public.id}"
   #private_ips     = ["10.0.0.2"]
-  security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  # security_groups = ["${aws_security_group.allow_IPSec.id}"]
   attachment {
     instance     = "${aws_instance.vMX1.id}"
     device_index = 1
@@ -238,20 +243,34 @@ resource "aws_network_interface" "vMX1_ge0-0-0" {
 }
 # 6-1b add Network interface to the vMX1 Instance
 resource "aws_network_interface" "vMX1_ge0-0-1" {
+  description = "vMX1_ge0-0-1"
   subnet_id       = "${aws_subnet.private2.id}"
   #private_ips     = ["10.0.0.2"]
-  security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  # security_groups = ["${aws_security_group.allow_IPSec.id}"]
   attachment {
     instance     = "${aws_instance.vMX1.id}"
     device_index = 2
   }
 }
 
+# 6-1c add Network interface to the vMX1 Instance
+resource "aws_network_interface" "vMX1_ge0-0-2" {
+  description = "vMX1_ge0-0-2"
+  subnet_id       = "${aws_subnet.private1.id}"
+  #private_ips     = ["10.0.0.2"]
+  #security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  attachment {
+    instance     = "${aws_instance.vMX1.id}"
+    device_index = 3
+  }
+}
+
 # 6-2a add Network interface to the vMX2 Instance
 resource "aws_network_interface" "vMX2_ge0-0-0" {
+  description = "vMX2_ge0-0-1"
   subnet_id       = "${aws_subnet.public.id}"
   #private_ips     = ["10.0.0.2"]
-  security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  # security_groups = ["${aws_security_group.allow_IPSec.id}"]
   attachment {
     instance     = "${aws_instance.vMX2.id}"
     device_index = 1
@@ -260,11 +279,24 @@ resource "aws_network_interface" "vMX2_ge0-0-0" {
 
 # 6-2b add Network interface to the vMX2 Instance
 resource "aws_network_interface" "vMX2_ge0-0-1" {
+  description = "vMX2_ge0-0-1"
   subnet_id       = "${aws_subnet.private2.id}"
   #private_ips     = ["10.0.0.2"]
-  security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  # security_groups = ["${aws_security_group.allow_IPSec.id}"]
   attachment {
     instance     = "${aws_instance.vMX2.id}"
     device_index = 2
+  }
+}
+
+# 6-2c add Network interface to the vMX2 Instance
+resource "aws_network_interface" "vMX2_ge0-0-2" {
+  description = "vMX2_ge0-0-2"
+  subnet_id       = "${aws_subnet.private1.id}"
+  #private_ips     = ["10.0.0.2"]
+  #security_groups = ["${aws_security_group.allow_IPSec.id}"]
+  attachment {
+    instance     = "${aws_instance.vMX2.id}"
+    device_index = 3
   }
 }
